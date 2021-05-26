@@ -11,7 +11,12 @@ class CountdownTimer {
   constructor({ selector, targetDate, onTick }) {
     this.selector = selector;
     this.targetDate = targetDate;
-    this.onTick = onTick;
+    this.refs = {
+      days: document.querySelector(`${this.selector} span[data-value="days"]`),
+      hours: document.querySelector(`${this.selector} span[data-value="hours"]`),
+      mins: document.querySelector(`${this.selector} span[data-value="mins"]`),
+      secs: document.querySelector(`${this.selector} span[data-value="secs"]`),
+    };
   }
 
   start() {
@@ -21,7 +26,7 @@ class CountdownTimer {
       const currentTime = Date.now();
       const deltaTime = startTime - currentTime;
       const time = this.getTimeComponents(deltaTime);
-      this.onTick(time);
+      this.updateClockface(time);
     }, 1000);
   }
 
@@ -37,19 +42,17 @@ class CountdownTimer {
   pad(value) {
     return String(value).padStart(2, '0');
   }
-}
-
-function updateClockface({ days, hours, mins, secs }) {
-  refs.days.textContent = `${days}`;
-  refs.hours.textContent = `${hours}`;
-  refs.mins.textContent = `${mins}`;
-  refs.secs.textContent = `${secs}`;
+  updateClockface({ days, hours, mins, secs }) {
+    this.refs.days.textContent = `${days}`;
+    this.refs.hours.textContent = `${hours}`;
+    this.refs.mins.textContent = `${mins}`;
+    this.refs.secs.textContent = `${secs}`;
+  }
 }
 
 const timer = new CountdownTimer({
   selector: '#timer-1',
-  targetDate: new Date('Jul 17, 2021'),
-  onTick: updateClockface,
+  targetDate: new Date('Jun, 06, 2021'),
 });
 
 timer.start();
